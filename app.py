@@ -1,8 +1,21 @@
 from flask import Flask, jsonify
 
-temp_app = Flask(__name__)
+import datetime as dt
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
 
-@app.route("///hawaii.sqlite")
+engine = create_engine("sqlite:///hawaii.sqlite")
+Base = automap_base()
+Base.prepare(engine, reflect=True)
+
+app = Flask(__name__)
+
+Measurement = Base.classes.measurement
+Station = Base.classes.station
+
+@app.route("/")
 def welcome():
     """List all available api routes."""
     return (
